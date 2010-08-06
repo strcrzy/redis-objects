@@ -74,7 +74,11 @@ class Redis
     # Return all members of the sorted set with their scores.  Extremely CPU-intensive.
     # Better to use a range instead.
     def members(options={})
-      v = from_redis range(0, -1, options)
+      if options[:reverse]      
+        v = from_redis revrange(0, -1, options)
+      else
+        v = from_redis range(0, -1, options)
+      end
       v.nil? ? [] : v
     end
 
